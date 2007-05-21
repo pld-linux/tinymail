@@ -111,11 +111,17 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/camel-lite-1.2
 %dir %{_libdir}/camel-lite-1.2/camel-providers
 %attr(755,root,root) %{_libdir}/camel-lite-1.2/camel-providers/libcamelimap.so
+%attr(755,root,root) %{_libdir}/camel-lite-1.2/camel-providers/libcamelimap.urls
 %attr(755,root,root) %{_libdir}/camel-lite-1.2/camel-providers/libcamellocal.so
+%attr(755,root,root) %{_libdir}/camel-lite-1.2/camel-providers/libcamellocal.urls
 %attr(755,root,root) %{_libdir}/camel-lite-1.2/camel-providers/libcamelnntp.so
+%attr(755,root,root) %{_libdir}/camel-lite-1.2/camel-providers/libcamelnntp.urls
 %attr(755,root,root) %{_libdir}/camel-lite-1.2/camel-providers/libcamelpop3.so
+%attr(755,root,root) %{_libdir}/camel-lite-1.2/camel-providers/libcamelpop3.urls
 %attr(755,root,root) %{_libdir}/camel-lite-1.2/camel-providers/libcamelsendmail.so
+%attr(755,root,root) %{_libdir}/camel-lite-1.2/camel-providers/libcamelsendmail.urls
 %attr(755,root,root) %{_libdir}/camel-lite-1.2/camel-providers/libcamelsmtp.so
+%attr(755,root,root) %{_libdir}/camel-lite-1.2/camel-providers/libcamelsmtp.urls
 %attr(755,root,root) %{_libdir}/libcamel-lite-1.2.so.0.0.0
 %attr(755,root,root) %{_libdir}/libcamel-lite-provider-1.2.so.8.1.0
 %attr(755,root,root) %{_libdir}/libtinymail-1.0.so.0.0.0
