@@ -5,26 +5,28 @@
 # - separate GTK+ dependencies into separate library
 # - check dependencies
 #
-%define snap 2019
+%bcond_with	maemo	 # build maemo platform
+#
 Summary:	A memory-efficient mail access library
 Summary(pl.UTF-8):	Wydajna pamięciowo biblioteka dostępu do poczty
 Name:		tinymail
-Version:	0.0.%{snap}
+Version:	0.0.6
 Release:	1
 License:	GPL
-Group:		Applications
-Source0:	%{name}-%{version}.tar.gz
-# Source0-md5:	abdc0d8b0e563aeb7c85cc7600bde44a
+Group:		Development/Libraries
+Source0: http://www.tinymail.org/files/releases/pre-releases/v%{version}/lib%{name}-%{version}.tar.bz2
+# Source0-md5:	68498359a3c2e808c263b90312165ec1
 URL:		http://www.tinymail.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
 BuildRequires:	glib2-devel
 BuildRequires:	gtk-doc-common
 BuildRequires:	intltool
+%{?with_maemo:BuildRequires:	libconic-devel}
 BuildRequires:	libtool
 BuildRequires:	python-devel
 BuildRequires:	rpm-pythonprov
-BuildRequires:	xulrunner-devel
+%{!?with_maemo:BuildRequires:	xulrunner-devel}
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
@@ -68,21 +70,21 @@ Static tinymail library.
 %description static -l pl.UTF-8
 Statyczna biblioteka tinymail.
 
-%package python
+%package -n python-tinymail
 Summary:	Python tinymail library bindings
 Summary(pl.UTF-8):	Wiązania Pythona dla biblioteki tinymail
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 %pyrequires_eq  python-modules
 
-%description python
+%description -n python-tinymail
 Python tinymail library bindings.
 
-%description python -l pl.UTF-8
+%description -n python-tinymail -l pl.UTF-8
 Wiązania Pythona dla biblioteki tinymail
 
 %prep
-%setup -q -n %{name}
+%setup -q -n lib%{name}-%{version}
 
 %build
 %{__glib_gettextize}
@@ -101,7 +103,9 @@ cd libtinymail-camel/camel-lite
 cd ../..
 %configure \
 	--enable-demoui \
-	--enable-gnome  \
+	%{?with_maemo:--with-platform=maemo} \
+	%{!?with_maemo:--enable-gnome}  \
+	--with-html-component=mozembed \
 	--enable-uigtk	   \
 	--enable-python-bindings \
 	--enable-gtk-doc
@@ -114,7 +118,7 @@ rm -rf $RPM_BUILD_ROOT
 %{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
 
-rm -f %{_libdir}/camel-lite-1.2/camel-providers/*.{la,a}
+rm -f $RPM_BUILD_ROOT%{_libdir}/camel-lite-1.2/camel-providers/*.{la,a}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -130,11 +134,15 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libcamel-lite-provider-1.2.so.*.*.*
 %attr(755,root,root) %{_libdir}/libtinymail-1.0.so.*.*.*
 %attr(755,root,root) %{_libdir}/libtinymail-camel-1.0.so.*.*.*
+%if %{without maemo}
 %attr(755,root,root) %{_libdir}/libtinymail-gnome-desktop-1.0.so.*.*.*
 %attr(755,root,root) %{_libdir}/libtinymail-gnomevfs-1.0.so.*.*.*
+%attr(755,root,root) %{_libdir}/libtinymailui-mozembed-1.0.so.*.*.*
+%else
+%attr(755,root,root) %{_libdir}/libtinymailui-maemo-1.0.so.*.*.*
+%endif
 %attr(755,root,root) %{_libdir}/libtinymailui-1.0.so.*.*.*
 %attr(755,root,root) %{_libdir}/libtinymailui-gtk-1.0.so.*.*.*
-%attr(755,root,root) %{_libdir}/libtinymailui-mozembed-1.0.so.*.*.*
 %dir %{_libdir}/camel-lite-1.2
 %dir %{_libdir}/camel-lite-1.2/camel-providers
 %attr(755,root,root) %{_libdir}/camel-lite-1.2/camel-providers/libcamelimap.so
@@ -156,20 +164,28 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libcamel-lite-provider-1.2.so
 %attr(755,root,root) %{_libdir}/libtinymail-1.0.so
 %attr(755,root,root) %{_libdir}/libtinymail-camel-1.0.so
-%attr(755,root,root) %{_libdir}/libtinymail-gnome-desktop-1.0.so
-%attr(755,root,root) %{_libdir}/libtinymail-gnomevfs-1.0.so
 %attr(755,root,root) %{_libdir}/libtinymailui-1.0.so
 %attr(755,root,root) %{_libdir}/libtinymailui-gtk-1.0.so
+%if %{without maemo}
 %attr(755,root,root) %{_libdir}/libtinymailui-mozembed-1.0.so
+%attr(755,root,root) %{_libdir}/libtinymail-gnome-desktop-1.0.so
+%attr(755,root,root) %{_libdir}/libtinymail-gnomevfs-1.0.so
+%else
+%attr(755,root,root) %{_libdir}/libtinymail-maemo-1.0.so
+%endif
 %{_libdir}/libcamel-lite-1.2.la
 %{_libdir}/libcamel-lite-provider-1.2.la
 %{_libdir}/libtinymail-1.0.la
 %{_libdir}/libtinymail-camel-1.0.la
+%if %{without maemo}
 %{_libdir}/libtinymail-gnome-desktop-1.0.la
 %{_libdir}/libtinymail-gnomevfs-1.0.la
+%{_libdir}/libtinymailui-mozembed-1.0.la
+%else
+%{_libdir}/libtinymailui-maemo-1.0.la
+%endif
 %{_libdir}/libtinymailui-1.0.la
 %{_libdir}/libtinymailui-gtk-1.0.la
-%{_libdir}/libtinymailui-mozembed-1.0.la
 %dir %{_includedir}/camel-lite
 %dir %{_includedir}/camel-lite/camel
 %{_includedir}/camel-lite/camel/*.h
@@ -194,11 +210,15 @@ rm -rf $RPM_BUILD_ROOT
 %{_pkgconfigdir}/camel-lite-provider-1.2.pc
 %{_pkgconfigdir}/libtinymail-1.0.pc
 %{_pkgconfigdir}/libtinymail-camel-1.0.pc
-%{_pkgconfigdir}/libtinymail-gnome-desktop-1.0.pc
-%{_pkgconfigdir}/libtinymail-gnomevfs-1.0.pc
 %{_pkgconfigdir}/libtinymailui-1.0.pc
 %{_pkgconfigdir}/libtinymailui-gtk-1.0.pc
+%if %{without maemo}
 %{_pkgconfigdir}/libtinymailui-mozembed-1.0.pc
+%{_pkgconfigdir}/libtinymail-gnome-desktop-1.0.pc
+%{_pkgconfigdir}/libtinymail-gnomevfs-1.0.pc
+%else
+%{_pkgconfigdir}/libtinymail-maemo-1.0.pc
+%endif
 
 %files static
 %defattr(644,root,root,755)
@@ -206,13 +226,17 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/libcamel-lite-provider-1.2.a
 %{_libdir}/libtinymail-1.0.a
 %{_libdir}/libtinymail-camel-1.0.a
+%if %{without maemo}
 %{_libdir}/libtinymail-gnome-desktop-1.0.a
 %{_libdir}/libtinymail-gnomevfs-1.0.a
+%{_libdir}/libtinymailui-mozembed-1.0.a
+%else
+%{_libdir}/libtinymailui-maemo-1.0.a
+%endif
 %{_libdir}/libtinymailui-1.0.a
 %{_libdir}/libtinymailui-gtk-1.0.a
-%{_libdir}/libtinymailui-mozembed-1.0.a
 
-%files python
+%files -n python-tinymail
 %defattr(644,root,root,755)
 %dir %{py_sitescriptdir}/tinymail-1.0
 %{py_sitescriptdir}/tinymail-1.0/tinymail/*.py[co]
