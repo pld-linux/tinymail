@@ -14,7 +14,7 @@ Version:	0.0.6
 Release:	1
 License:	GPL
 Group:		Development/Libraries
-Source0: http://www.tinymail.org/files/releases/pre-releases/v%{version}/lib%{name}-%{version}.tar.bz2
+Source0:	http://www.tinymail.org/files/releases/pre-releases/v%{version}/lib%{name}-%{version}.tar.bz2
 # Source0-md5:	68498359a3c2e808c263b90312165ec1
 URL:		http://www.tinymail.org/
 BuildRequires:	autoconf
@@ -75,6 +75,7 @@ Summary:	Python tinymail library bindings
 Summary(pl.UTF-8):	Wiązania Pythona dla biblioteki tinymail
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
+Obsoletes:	tinymail-python
 %pyrequires_eq  python-modules
 
 %description -n python-tinymail
