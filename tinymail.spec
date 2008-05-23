@@ -10,12 +10,12 @@
 Summary:	A memory-efficient mail access library
 Summary(pl.UTF-8):	Wydajna pamięciowo biblioteka dostępu do poczty
 Name:		tinymail
-Version:	0.0.6
+Version:	0.0.9
 Release:	1
 License:	GPL
 Group:		Development/Libraries
 Source0:	http://www.tinymail.org/files/releases/pre-releases/v%{version}/lib%{name}-%{version}.tar.bz2
-# Source0-md5:	68498359a3c2e808c263b90312165ec1
+# Source0-md5:	674db3cb4750ba0a3e90aa95ec28bcc7
 URL:		http://www.tinymail.org/
 BuildRequires:	autoconf
 BuildRequires:	automake
@@ -132,7 +132,6 @@ rm -rf $RPM_BUILD_ROOT
 %doc AUTHORS ChangeLog NEWS README TODO
 %attr(755,root,root) %{_bindir}/tny-demoui
 %attr(755,root,root) %{_libdir}/libcamel-lite-1.2.so.*.*.*
-%attr(755,root,root) %{_libdir}/libcamel-lite-provider-1.2.so.*.*.*
 %attr(755,root,root) %{_libdir}/libtinymail-1.0.so.*.*.*
 %attr(755,root,root) %{_libdir}/libtinymail-camel-1.0.so.*.*.*
 %if %{without maemo}
@@ -162,7 +161,6 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/libcamel-lite-1.2.so
-%attr(755,root,root) %{_libdir}/libcamel-lite-provider-1.2.so
 %attr(755,root,root) %{_libdir}/libtinymail-1.0.so
 %attr(755,root,root) %{_libdir}/libtinymail-camel-1.0.so
 %attr(755,root,root) %{_libdir}/libtinymailui-1.0.so
@@ -175,7 +173,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/libtinymail-maemo-1.0.so
 %endif
 %{_libdir}/libcamel-lite-1.2.la
-%{_libdir}/libcamel-lite-provider-1.2.la
 %{_libdir}/libtinymail-1.0.la
 %{_libdir}/libtinymail-camel-1.0.la
 %if %{without maemo}
@@ -224,7 +221,6 @@ rm -rf $RPM_BUILD_ROOT
 %files static
 %defattr(644,root,root,755)
 %{_libdir}/libcamel-lite-1.2.a
-%{_libdir}/libcamel-lite-provider-1.2.a
 %{_libdir}/libtinymail-1.0.a
 %{_libdir}/libtinymail-camel-1.0.a
 %if %{without maemo}
